@@ -94,8 +94,12 @@
       var result = false;
       for (var i = 0, len = this.rows().length; i < len; i++) {
         result = result || this.hasRowConflictAt(i);
+        if (result) {
+          return true;
+        }
       }
-      return result;
+
+      return false;
       // implementation below may require to save a reference to the board
       // return _.any(this.rows(), function(row, ind) {
       //   return hasRowConflictAt(ind) === true;
@@ -122,13 +126,11 @@
       var result = false;
       for (var i = 0, len = this.rows().length; i < len; i++) {
         result = result ||this.hasColConflictAt(i);
+        if (result) {
+          return true;
+        }
       }
-      return result;
-      // implementation below may require to save a reference to the board
-      // return _.any(this.rows(), function() {
-      //   return hasColConflictAt(colIndex);
-      // })
-      // return false; // fixme
+      return false;
     },
 
 
@@ -156,9 +158,12 @@
 
       for (; rownum < size && colnum < size; rownum++, colnum++) {
         num += this.get(rownum)[colnum];
+        if (num > 1) {
+          return true;
+        }
       }
 
-      return num > 1;
+      return false;
     },
 
     // test if any major diagonals on this board contain conflicts
@@ -166,10 +171,13 @@
       // should check with indices -n+1 to n-1
       var result = false;
       for (var i = 0, len = this.rows().length; i < len; i++) {
-        result = result || this.hasMajorDiagonalConflictAt(i)|| this.hasMajorDiagonalConflictAt(-i);
+        result = result || this.hasMajorDiagonalConflictAt(i) || this.hasMajorDiagonalConflictAt(-i);
+        if (result) {
+          return result;
+        }
       }
 
-      return result;
+      return false;
     },
 
 
@@ -198,9 +206,12 @@
 
       for (; rownum < size && colnum >= 0; rownum++, colnum--) {
         num += this.get(rownum)[colnum];
+        if (num > 1) {
+          return true;
+        }
       }
 
-      return num > 1;
+      return false;
     },
 
     // test if any minor diagonals on this board contain conflicts
@@ -209,8 +220,11 @@
       var result = false;
       for (var i = 0, len = 2*(this.rows().length - 1); i < len; i++) {
         result = result || this.hasMinorDiagonalConflictAt(i);
+        if (result) {
+          return true;
+        }
       }
-      return result;
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
