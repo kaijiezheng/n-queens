@@ -91,19 +91,11 @@
     hasAnyRowConflicts: function() {
       // Uses hasRowConflictAt for every row on the board
       // Returns true if any row has a conflict
-      var result = false;
       for (var i = 0, len = this.rows().length; i < len; i++) {
-        result = result || this.hasRowConflictAt(i);
-        if (result) {
-          return true;
-        }
+        if (this.hasRowConflictAt(i)) return true;
       }
 
       return false;
-      // implementation below may require to save a reference to the board
-      // return _.any(this.rows(), function(row, ind) {
-      //   return hasRowConflictAt(ind) === true;
-      // });
     },
 
 
@@ -123,12 +115,8 @@
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      var result = false;
       for (var i = 0, len = this.rows().length; i < len; i++) {
-        result = result ||this.hasColConflictAt(i);
-        if (result) {
-          return true;
-        }
+        if (this.hasColConflictAt(i)) return true;
       }
       return false;
     },
@@ -158,9 +146,7 @@
 
       for (; rownum < size && colnum < size; rownum++, colnum++) {
         num += this.get(rownum)[colnum];
-        if (num > 1) {
-          return true;
-        }
+        if (num > 1) return true;
       }
 
       return false;
@@ -169,12 +155,8 @@
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
       // should check with indices -n+1 to n-1
-      var result = false;
       for (var i = 0, len = this.rows().length; i < len; i++) {
-        result = result || this.hasMajorDiagonalConflictAt(i) || this.hasMajorDiagonalConflictAt(-i);
-        if (result) {
-          return result;
-        }
+        if (this.hasMajorDiagonalConflictAt(i) || this.hasMajorDiagonalConflictAt(-i)) return true;
       }
 
       return false;
@@ -206,9 +188,7 @@
 
       for (; rownum < size && colnum >= 0; rownum++, colnum--) {
         num += this.get(rownum)[colnum];
-        if (num > 1) {
-          return true;
-        }
+        if (num > 1) return true;
       }
 
       return false;
@@ -217,12 +197,8 @@
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
       // should check with indices 0 to 2(n-1)
-      var result = false;
       for (var i = 0, len = 2*(this.rows().length - 1); i < len; i++) {
-        result = result || this.hasMinorDiagonalConflictAt(i);
-        if (result) {
-          return true;
-        }
+        if (this.hasMinorDiagonalConflictAt(i)) return true;
       }
       return false;
     }
