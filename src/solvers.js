@@ -9,11 +9,7 @@
 // hint: you'll need to do a full-search of all possible arrangements of pieces!
 // (There are also optimizations that will allow you to skip a lot of the dead search space)
 // take a look at solversSpec.js to see what the tests are expecting
-
-
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
-
-
 
 window.findNRooksSolution = function(n) {
   var solution = new Board({'n': n});
@@ -25,24 +21,6 @@ window.findNRooksSolution = function(n) {
   return solution.rows();
 };
 
-// var getNRooksSolutions = function(board, columns, row, solutions) {
-//   if (row < board.length) {
-//     if (columns.length === 0) return;
-//     var temp = JSON.stringify(board);
-
-//     _.each(columns, function(col, ind) {
-//       var b = new Board(JSON.parse(temp));
-//       var pos = columns.slice();
-//       pos.splice(ind, 1);
-//       b.togglePiece(row, col);
-
-//       getNRooksSolutions(b.rows(), pos, row + 1, solutions);
-//     });
-//   } else {
-//     solutions.push(board);
-//   }
-// };
-
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
   var solutions = [];
@@ -51,29 +29,19 @@ window.countNRooksSolutions = function(n) {
   var getNRooksSolutions = function(board, columns, rownum) {
     if (rownum < n) {
       if (columns.length === 0) return;
-      var temp = board.slice();
-      
       _.each(columns, function(col, ind, columns) {
+        board.push(col);
         var pos = columns.slice();
         if (pos.length === 1) {
           pos = [];
         } else {
           pos.splice(ind, 1);
         }
-        temp[rownum] = col;
-        getNRooksSolutions(temp, pos, rownum + 1);
+        getNRooksSolutions(board, pos, rownum + 1);
+        board.pop();
       });
     } else {
-      // var boardTwo = [];
-      // var boardThree = [];
-      // var boardFour = [];
-      // _.each(board, function(col, row) {
-      //   console.log(col, row, n-1-row, n-1-col);
-      //   boardTwo[col] = n-1-row;
-      //   boardThree[n-1-row] = n-1-col;
-      //   boardFour[n-1-col] = row;
-      // });
-      solutions.push(board);
+      solutions.push(board.slice());
     }
   };
 
@@ -87,25 +55,24 @@ window.countNRooksSolutions = function(n) {
 window.findNQueensSolution = function(n) {
   var solution;
   var solutions = [];
-  
+
 
   var getNRooksSolutions = function(board, columns, rownum) {
     if (rownum < n) {
       if (columns.length === 0) return;
-      var temp = board.slice();
-      
       _.each(columns, function(col, ind, columns) {
+        board.push(col);
         var pos = columns.slice();
         if (pos.length === 1) {
           pos = [];
         } else {
           pos.splice(ind, 1);
         }
-        temp[rownum] = col;
-        getNRooksSolutions(temp, pos, rownum + 1);
+        getNRooksSolutions(board, pos, rownum + 1);
+        board.pop();
       });
     } else {
-      solutions.push(board);
+      solutions.push(board.slice());
     }
   };
 
@@ -136,20 +103,19 @@ window.countNQueensSolutions = function(n) {
   var getNRooksSolutions = function(board, columns, rownum) {
     if (rownum < n) {
       if (columns.length === 0) return;
-      var temp = board.slice();
-      
       _.each(columns, function(col, ind, columns) {
+        board.push(col);
         var pos = columns.slice();
         if (pos.length === 1) {
           pos = [];
         } else {
           pos.splice(ind, 1);
         }
-        temp[rownum] = col;
-        getNRooksSolutions(temp, pos, rownum + 1);
+        getNRooksSolutions(board, pos, rownum + 1);
+        board.pop();
       });
     } else {
-      solutions.push(board);
+      solutions.push(board.slice());
     }
   };
 
