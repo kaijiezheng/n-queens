@@ -26,27 +26,28 @@ window.countNRooksSolutions = function(n) {
   var solutions = [];
   var solutionCount = 0;
 
+  var columns = Math.pow(2, n) - 1;
+
   var getNRooksSolutions = function(board, columns, rownum) {
+    // can replace rownum with board.length
     if (rownum < n) {
-      if (columns.length === 0) return;
-      _.each(columns, function(col, ind, columns) {
-        board.push(col);
-        var pos = columns.slice();
-        if (pos.length === 1) {
-          pos = [];
-        } else {
-          pos.splice(ind, 1);
+      if (columns === 0) return;
+      var binary = columns.toString(2);
+      for (var i = binary.length - 1, j = 0; i >= 0; i--, j++) {
+        if (binary[i] === '1') {
+          board.push(j);
+          getNRooksSolutions(board, columns^(1 << j), rownum+1);
+          board.pop();
         }
-        getNRooksSolutions(board, pos, rownum + 1);
-        board.pop();
-      });
-    } else {
-      solutions.push(board.slice());
+      }
+    } else if (board.length === n) {
+      // solutions.push(board.slice());
+      solutionCount++;
     }
   };
 
-  getNRooksSolutions([], _.range(n), 0);
-  solutionCount = solutions.length;
+  getNRooksSolutions([], columns, 0);
+  // solutionCount = solutions.length;
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };
@@ -99,39 +100,43 @@ window.findNQueensSolution = function(n) {
 window.countNQueensSolutions = function(n) {
   var solutions = [];
   var boards = [];
+  var solutionCount = 0;
 
-  var getNRooksSolutions = function(board, columns, rownum) {
+  var getNQueensSolutions = function(board, columns, major, minor, rownum) {
+    // can replace rownum with board.length
     if (rownum < n) {
-      if (columns.length === 0) return;
-      _.each(columns, function(col, ind, columns) {
-        board.push(col);
-        var pos = columns.slice();
-        if (pos.length === 1) {
-          pos = [];
-        } else {
-          pos.splice(ind, 1);
+      if (columns & major & minor === 0) return;
+      var binary = (columns & major & minor).toString(2);
+      console.log(binary);
+      for (var i = binary.length - 1, j = 0; i >= 0; i--, j++) {
+        if (binary[i] === '1') {
+          board.push(j);
+          var piece = (1 << j);
+          getNQueensSolutions(board, columns^(1 << j), columns^piece, major << 1 | 1 & ~(piece << 1), minor >> 1 | farLeftOne & ~(piece >> 1), rownum+1);
+          board.pop();
         }
-        getNRooksSolutions(board, pos, rownum + 1);
-        board.pop();
-      });
-    } else {
-      solutions.push(board.slice());
+      }
+    } else if (board.length === n && n !== 0) {
+      // solutions.push(board.slice());
+      solutionCount++;
     }
   };
 
-  getNRooksSolutions([], _.range(n), 0);
+  var columns = Math.pow(2, n) - 1;
 
-  _.each(solutions, function(sol) {
-    var board = new Board({'n': n});
-    _.each(sol, function(col, row) {
-      board.togglePiece(row, col);
-    });
-    if (!board.hasAnyQueensConflicts()) {
-      boards.push(board.rows());
-    }
-  });
+  getNQueensSolutions([], columns, columns, columns, 0);
 
-  solutionCount = boards.length;
+  // _.each(solutions, function(sol) {
+  //   var board = new Board({'n': n});
+  //   _.each(sol, function(col, row) {
+  //     board.togglePiece(row, col);
+  //   });
+  //   if (!board.hasAnyQueensConflicts()) {
+  //     boards.push(board.rows());
+  //   }
+  // });
+
+  // solutionCount = boards.length;
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
 };
